@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine's Day Special!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #d6336c;
+    }
+    .btn {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      transition: transform 0.3s ease;
+    }
+    .yes {
+      background-color: #28a745;
+      color: white;
+    }
+    .no {
+      background-color: #dc3545;
+      color: white;
+    }
+    .cheesy-questions {
+      margin-top: 30px;
+      min-height: 30px;
+    }
+    .cheesy-question {
+      font-style: italic;
+      color: #555;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    /* Image display */
+    #yesVideoContainer, #noImageContainer {
+      display: none;
+      margin-top: 15px;
+    }
+    .response-image {
+      max-width: 150px;
+      border-radius: 8px;
+    }
+    .response-video {
+      position: fixed;
+      top: 10%;
+      left: 10%;
+      width: 80vw;
+      height: 80vh;
+      object-fit: cover;
+    }
+    #noImageContainer {
+      position: absolute;
+      top: 50%;
+      left: 110%;
+      transform: translateY(-50%);
+    }
+    #yesNote {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 32px;
+      color: #d6336c;
+      font-weight: bold;
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+      40% { transform: translateX(-50%) translateY(-10px); }
+      60% { transform: translateX(-50%) translateY(-5px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Will you be my Valentine 👉👈</h1>
+    <button class="btn yes" id="yesBtn">Yes</button>
+    <button class="btn no" id="noBtn">No</button>
+
+    <div class="cheesy-questions" id="questionsContainer"></div>
+
+    <!-- Video container for Yes click -->
+    <div id="yesVideoContainer">
+      <video id="yesVideo" class="response-video" src="vid.mp4"></video>
+    </div>
+
+    <!-- Image container for No click -->
+    <div id="noImageContainer">
+      <img id="noImage" src="" alt="Reaction Image" class="response-image">
+    </div>
+
+    <!-- Text me note -->
+    <div id="yesNote"><a href="https://wa.me/254712345678" target="_blank" style="text-decoration: none; color: #d6336c;">text me 😚</a></div>
+  </div>
+  
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const questionsContainer = document.getElementById('questionsContainer');
+    const yesVideoContainer = document.getElementById('yesVideoContainer');
+    const yesVideo = document.getElementById('yesVideo');
+    const noImageContainer = document.getElementById('noImageContainer');
+    const noImage = document.getElementById('noImage');
+    const yesNote = document.getElementById('yesNote');
+
+    // Array of cheesy questions
+    const cheesyQuestions = [
+      "Naweee", "it'll be fun😹", "just for 1 dayyyy", "you want it too🌝", "last chance😹"
+    ];
+
+    // Array of image paths for "No" clicks
+    const noImages = [
+      '1.jpg',
+      '2.jpg',
+      '3.jpg',
+      '4.jpg',
+      '5.jpg'
+    ];
+    let clickCount = 0;
+
+    // No button functionality
+    noBtn.addEventListener('click', function() {
+      clickCount++;
+      let scale = Math.max(1 - clickCount * 0.2, 0.2);
+      noBtn.style.transform = 'scale(' + scale + ')';
+
+      questionsContainer.innerHTML = '';
+      if (clickCount <= cheesyQuestions.length) {
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('cheesy-question');
+        questionDiv.textContent = cheesyQuestions[clickCount - 1];
+        questionsContainer.appendChild(questionDiv);
+
+        setTimeout(() => {
+          questionDiv.style.animation = 'fadeOut 1s forwards';
+          setTimeout(() => { questionDiv.remove(); }, 1000);
+        }, 3000);
+      }
+
+      if (clickCount <= noImages.length) {
+        noImage.src = noImages[clickCount - 1];
+        noImageContainer.style.display = 'block';
+      }
+
+      if (scale <= 0.2) {
+        noBtn.style.display = 'none';
+        noImageContainer.style.display = 'none';
+      }
+    });
+
+    // Yes button functionality
+    yesBtn.addEventListener('click', function() {
+      yesVideoContainer.style.display = 'block';
+      yesVideo.muted = false;
+      yesVideo.play();
+      yesNote.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
